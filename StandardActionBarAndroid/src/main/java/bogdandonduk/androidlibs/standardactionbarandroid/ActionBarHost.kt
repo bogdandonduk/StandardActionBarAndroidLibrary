@@ -1,5 +1,6 @@
 package bogdandonduk.androidlibs.standardactionbarandroid
 
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -9,11 +10,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.AppBarLayout
 
 interface ActionBarHost {
-    var actionBarRootAppBarLayout: AppBarLayout?
-
     var toolbar: Toolbar?
 
     var navDrawerToggle: ActionBarDrawerToggle?
+
+    val optionsMenuItems: MutableMap<String, MenuItem>
 
     fun initializeActionBar(
         activity: AppCompatActivity,
