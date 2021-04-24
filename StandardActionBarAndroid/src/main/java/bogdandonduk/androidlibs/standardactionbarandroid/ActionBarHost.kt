@@ -7,7 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.navigation.NavigationView
 
 interface ActionBarHost {
     var toolbar: Toolbar?
@@ -15,6 +15,8 @@ interface ActionBarHost {
     var navDrawerToggle: ActionBarDrawerToggle?
 
     val optionsMenuItems: MutableMap<String, MenuItem>
+
+    var navDrawerRootView: View?
 
     fun initializeActionBarWithDrawer(
         activity: AppCompatActivity,
@@ -25,9 +27,13 @@ interface ActionBarHost {
         @StringRes openDrawerContentDescStringResId: Int = R.string.open_menu,
         @StringRes closeDrawerContentDescStringResId: Int = R.string.close_menu,
         mainContentView: View? = null,
-        mainContentSlideOffsetToggleReference: Boolean
+        mainContentSlideOffsetToggleReference: Boolean,
+        navDrawerView: NavigationView
     ) : ActionBarDrawerToggle? {
-        activity.setSupportActionBar(toolbar)
+        this.toolbar = toolbar
+        navDrawerRootView = navDrawerView
+
+        activity.setSupportActionBar(this.toolbar)
 
         with(activity.supportActionBar!!) {
             setDisplayHomeAsUpEnabled(showHomeAsUp)
@@ -38,8 +44,6 @@ interface ActionBarHost {
             } else
                 setDisplayShowTitleEnabled(false)
         }
-
-        this.toolbar = toolbar
 
         navDrawerToggle = object : ActionBarDrawerToggle(
                 activity,
@@ -66,7 +70,9 @@ interface ActionBarHost {
         title: String? = null,
         showHomeAsUp: Boolean = true,
     ) {
-        activity.setSupportActionBar(toolbar)
+        this.toolbar = toolbar
+
+        activity.setSupportActionBar(this.toolbar)
 
         with(activity.supportActionBar!!) {
             setDisplayHomeAsUpEnabled(showHomeAsUp)
@@ -78,7 +84,7 @@ interface ActionBarHost {
                 setDisplayShowTitleEnabled(false)
         }
 
-        this.toolbar = toolbar
+
 
         this.toolbar!!.setNavigationOnClickListener {
             activity.onBackPressed()
