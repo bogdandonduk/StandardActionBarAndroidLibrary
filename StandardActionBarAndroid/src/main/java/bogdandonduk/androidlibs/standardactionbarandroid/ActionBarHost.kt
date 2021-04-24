@@ -16,12 +16,12 @@ interface ActionBarHost {
 
     val optionsMenuItems: MutableMap<String, MenuItem>
 
-    fun initializeActionBar(
+    fun initializeActionBarWithDrawer(
         activity: AppCompatActivity,
         toolbar: Toolbar,
         title: String? = null,
         showHomeAsUp: Boolean = true,
-        hostDrawerLayout: DrawerLayout? = null,
+        hostDrawerLayout: DrawerLayout,
         @StringRes openDrawerContentDescStringResId: Int = R.string.open_menu,
         @StringRes closeDrawerContentDescStringResId: Int = R.string.close_menu,
         mainContentView: View? = null,
@@ -41,32 +41,47 @@ interface ActionBarHost {
 
         this.toolbar = toolbar
 
-        return if(showHomeAsUp) {
-            if(hostDrawerLayout != null) {
-                navDrawerToggle = object : ActionBarDrawerToggle(
-                    activity,
-                    hostDrawerLayout,
-                    openDrawerContentDescStringResId,
-                    closeDrawerContentDescStringResId
-                ) {
-                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                        super.onDrawerSlide(drawerView, slideOffset)
+        navDrawerToggle = object : ActionBarDrawerToggle(
+                activity,
+                hostDrawerLayout,
+                openDrawerContentDescStringResId,
+                closeDrawerContentDescStringResId
+        ) {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                super.onDrawerSlide(drawerView, slideOffset)
 
-                        if(mainContentSlideOffsetToggleReference)
-                            with(mainContentView) {
-                                this?.translationX = drawerView.width * slideOffset
-                            }
+                if(mainContentSlideOffsetToggleReference)
+                    with(mainContentView) {
+                        this?.translationX = drawerView.width * slideOffset
                     }
-                }
-
-                navDrawerToggle
-            } else {
-                this.toolbar?.setNavigationOnClickListener {
-                    activity.onBackPressed()
-                }
-
-                null
             }
-        } else null
+        }
+
+        return navDrawerToggle
+    }
+
+    fun initializeActionBarWithBackNavigation(
+        activity: AppCompatActivity,
+        toolbar: Toolbar,
+        title: String? = null,
+        showHomeAsUp: Boolean = true,
+    ) {
+        activity.setSupportActionBar(toolbar)
+
+        with(activity.supportActionBar!!) {
+            setDisplayHomeAsUpEnabled(showHomeAsUp)
+
+            if(title != null) {
+                setDisplayShowTitleEnabled(true)
+                this.title = title
+            } else
+                setDisplayShowTitleEnabled(false)
+        }
+
+        this.toolbar = toolbar
+
+        this.toolbar!!.setNavigationOnClickListener {
+            activity.onBackPressed()
+        }
     }
 }
