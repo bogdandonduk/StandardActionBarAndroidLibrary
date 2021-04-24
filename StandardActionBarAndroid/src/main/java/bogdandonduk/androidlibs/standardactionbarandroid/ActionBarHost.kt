@@ -7,16 +7,19 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 
 interface ActionBarHost {
+    var actionBarRootAppBarLayout: AppBarLayout?
+
     var toolbar: Toolbar?
 
     var navDrawerToggle: ActionBarDrawerToggle?
 
     val optionsMenuItems: MutableMap<String, MenuItem>
 
-    var navDrawerRootView: View?
+    var navDrawerRootNavigationView: NavigationView?
 
     fun initializeActionBarWithDrawer(
         activity: AppCompatActivity,
@@ -31,7 +34,7 @@ interface ActionBarHost {
         navDrawerView: NavigationView
     ) : ActionBarDrawerToggle? {
         this.toolbar = toolbar
-        navDrawerRootView = navDrawerView
+        navDrawerRootNavigationView = navDrawerView
 
         activity.setSupportActionBar(this.toolbar)
 
