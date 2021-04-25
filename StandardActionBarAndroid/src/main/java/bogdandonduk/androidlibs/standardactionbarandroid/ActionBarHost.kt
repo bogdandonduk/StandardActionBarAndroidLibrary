@@ -17,7 +17,7 @@ interface ActionBarHost {
 
     var navDrawerToggle: ActionBarDrawerToggle?
 
-    val optionsMenuItems: MutableMap<String, MenuItem>
+    val optionsMenuItems: MutableMap<String, Pair<MenuItem, (itemKey: String, menuItem: MenuItem) -> Unit>>
 
     var navDrawerRootNavigationView: NavigationView?
 
@@ -86,8 +86,6 @@ interface ActionBarHost {
             } else
                 setDisplayShowTitleEnabled(false)
         }
-
-
 
         this.toolbar!!.setNavigationOnClickListener {
             activity.onBackPressed()
