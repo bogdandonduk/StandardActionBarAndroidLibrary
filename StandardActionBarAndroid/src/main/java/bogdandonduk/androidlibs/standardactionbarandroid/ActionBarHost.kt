@@ -17,9 +17,25 @@ interface ActionBarHost {
 
     var navDrawerToggle: ActionBarDrawerToggle?
 
-    val optionsMenuItems: MutableMap<String, Pair<MenuItem, (itemKey: String, menuItem: MenuItem) -> Unit>>
+    val optionsMenuItems: MutableMap<String, Pair<MenuItem?, (itemKey: String, menuItem: MenuItem?) -> Unit>>
 
     var navDrawerRootNavigationView: NavigationView?
+
+    fun initializeOptionsMenu(themeAction: (() -> Unit)?) {
+        optionsMenuItems.forEach { mapEntry ->
+            mapEntry.run {
+                value.let {
+                    it.first?.setOnMenuItemClickListener { menuItem ->
+                        it.second.invoke(mapEntry.key, menuItem)
+
+                        false
+                    }
+                }
+            }
+        }
+
+        themeAction?.invoke()
+    }
 
     fun initializeActionBarWithDrawer(
         activity: AppCompatActivity,
