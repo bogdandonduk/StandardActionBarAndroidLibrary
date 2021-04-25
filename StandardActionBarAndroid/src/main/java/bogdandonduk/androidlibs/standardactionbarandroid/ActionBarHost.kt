@@ -11,6 +11,16 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 
 interface ActionBarHost {
+    companion object {
+        val onDrawerSlideMainContentFullOffsetBehavior = { drawerView: View, slideOffset: Float, mainContentView: View ->
+            mainContentView.translationX = drawerView.width * slideOffset
+        }
+
+        val onDrawerSlideMainContentPartialOffsetBehavior = { drawerView: View, slideOffset: Float, mainContentView: View ->
+            mainContentView.translationX = (drawerView.width * slideOffset) / 10
+        }
+    }
+
     var actionBarRootAppBarLayout: AppBarLayout?
 
     var toolbar: Toolbar?
@@ -45,8 +55,8 @@ interface ActionBarHost {
         hostDrawerLayout: DrawerLayout,
         @StringRes openDrawerContentDescStringResId: Int = R.string.open_menu,
         @StringRes closeDrawerContentDescStringResId: Int = R.string.close_menu,
-        mainContentView: View? = null,
-        mainContentSlideOffsetToggleReference: Boolean,
+        mainContentView: View,
+        onDrawerSlideBehavior: ((drawerView: View, slideOffset: Float, mainContentView: View) -> Unit)? = null,
         navDrawerView: NavigationView
     ) : ActionBarDrawerToggle? {
         this.toolbar = toolbar
@@ -73,10 +83,7 @@ interface ActionBarHost {
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                 super.onDrawerSlide(drawerView, slideOffset)
 
-                if(mainContentSlideOffsetToggleReference)
-                    with(mainContentView) {
-                        this?.translationX = drawerView.width * slideOffset
-                    }
+                onDrawerSlideBehavior?.invoke(drawerView, slideOffset, mainContentView)
             }
         }
 
