@@ -18,6 +18,8 @@ interface ActionBarHost {
 
         val onDrawerSlideMainContentPartialOffsetBehavior = { drawerView: View, slideOffset: Float, mainContentView: View ->
             mainContentView.translationX = (drawerView.width * slideOffset) / 10
+            mainContentView.scaleX = 1f - slideOffset / 10
+            mainContentView.scaleY = 1f - slideOffset / 10
         }
     }
 
