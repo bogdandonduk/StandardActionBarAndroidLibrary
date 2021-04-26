@@ -1,5 +1,6 @@
 package bogdandonduk.androidlibs.standardactionbarandroid
 
+import android.app.Activity
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
@@ -59,8 +60,9 @@ interface ActionBarHost {
         @StringRes closeDrawerContentDescStringResId: Int = R.string.close_menu,
         mainContentView: View,
         onDrawerSlideBehavior: ((drawerView: View, slideOffset: Float, mainContentView: View) -> Unit)? = null,
-        navDrawerView: NavigationView
-    ) : ActionBarDrawerToggle? {
+        navDrawerView: NavigationView,
+        syncState: Boolean
+    ) : ActionBarDrawerToggle {
         this.toolbar = toolbar
         navDrawerRootNavigationView = navDrawerView
 
@@ -89,8 +91,15 @@ interface ActionBarHost {
             }
         }
 
-        return navDrawerToggle
+        if(syncState) {
+            hostDrawerLayout.addDrawerListener(navDrawerToggle!!)
+            navDrawerToggle!!.syncState()
+        }
+        return navDrawerToggle!!
     }
+
+    fun overrideOnOptionsItemSelected(activity: Activity, menuItem: MenuItem) =
+        (navDrawerToggle != null && navDrawerToggle!!.onOptionsItemSelected(menuItem)) || activity.onOptionsItemSelected(menuItem)
 
     fun initializeActionBarWithBackNavigation(
         activity: AppCompatActivity,
