@@ -34,7 +34,7 @@ interface ActionBarHost {
 
     var navDrawerRootNavigationView: NavigationView?
 
-    fun initializeOptionsMenu(themeAction: (() -> Unit)?) {
+    fun initializeOptionsMenu() {
         optionsMenuItems.forEach { mapEntry ->
             mapEntry.run {
                 value.let {
@@ -46,8 +46,6 @@ interface ActionBarHost {
                 }
             }
         }
-
-        themeAction?.invoke()
     }
 
     fun initializeActionBarWithDrawer(
