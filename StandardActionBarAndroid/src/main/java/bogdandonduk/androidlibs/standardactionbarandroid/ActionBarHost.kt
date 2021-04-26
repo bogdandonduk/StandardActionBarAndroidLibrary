@@ -96,9 +96,6 @@ interface ActionBarHost {
         return navDrawerToggle!!
     }
 
-    fun overrideOnOptionsItemSelected(activity: Activity, menuItem: MenuItem) =
-        (navDrawerToggle != null && navDrawerToggle!!.onOptionsItemSelected(menuItem)) || activity.onOptionsItemSelected(menuItem)
-
     fun initializeActionBarWithBackNavigation(
         activity: AppCompatActivity,
         toolbar: Toolbar,
