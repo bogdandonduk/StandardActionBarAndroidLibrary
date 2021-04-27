@@ -53,12 +53,14 @@ interface ActionBarHost {
         toolbar: Toolbar,
         title: String? = null,
         showHomeAsUp: Boolean = true,
+        showTitle: Boolean,
         hostDrawerLayout: DrawerLayout,
         @StringRes openDrawerContentDescStringResId: Int = R.string.open_menu,
         @StringRes closeDrawerContentDescStringResId: Int = R.string.close_menu,
         mainContentView: View,
         onDrawerSlideBehavior: ((drawerView: View, slideOffset: Float, mainContentView: View) -> Unit)? = null,
         navDrawerView: NavigationView,
+
         syncState: Boolean
     ) : ActionBarDrawerToggle {
         this.toolbar = toolbar
@@ -68,9 +70,9 @@ interface ActionBarHost {
 
         with(activity.supportActionBar!!) {
             setDisplayHomeAsUpEnabled(showHomeAsUp)
-            setDisplayShowTitleEnabled(true)
+            setDisplayShowTitleEnabled(showTitle)
 
-            if(title != null) this.title = title
+            if(title != null && showTitle) this.title = title
         }
 
         navDrawerToggle = object : ActionBarDrawerToggle(
