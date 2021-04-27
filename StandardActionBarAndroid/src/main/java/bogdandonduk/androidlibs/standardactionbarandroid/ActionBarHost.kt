@@ -68,12 +68,9 @@ interface ActionBarHost {
 
         with(activity.supportActionBar!!) {
             setDisplayHomeAsUpEnabled(showHomeAsUp)
+            setDisplayShowTitleEnabled(true)
 
-            if(title != null) {
-                setDisplayShowTitleEnabled(true)
-                this.title = title
-            } else
-                setDisplayShowTitleEnabled(false)
+            if(title != null) this.title = title
         }
 
         navDrawerToggle = object : ActionBarDrawerToggle(
