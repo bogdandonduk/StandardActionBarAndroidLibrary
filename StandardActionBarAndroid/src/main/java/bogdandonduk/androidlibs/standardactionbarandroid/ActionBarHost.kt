@@ -6,7 +6,9 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
@@ -118,5 +120,28 @@ interface ActionBarHost {
         this.toolbar!!.setNavigationOnClickListener {
             activity.onBackPressed()
         }
+    }
+
+    fun getHomeAsUpIndicatorAsView(activity: Activity, toolbar: Toolbar?) : View? {
+        if(toolbar != null && toolbar.childCount > 0) {
+            toolbar.children.forEach {
+                if(it.toString().contains("imagebutton", true)) return it
+            }
+
+            return null
+        } else return null
+    }
+
+    fun getOverflowMenuIconAsView(toolbar: Toolbar?) : View? {
+        if(toolbar != null && toolbar.childCount > 0) {
+            toolbar.children.forEach {
+                if(it is ActionMenuView)
+                    it.children.forEach { menuItemChild ->
+                        if(menuItemChild.toString().contains("overflowmenu", true)) return menuItemChild
+                    }
+            }
+
+            return null
+        } else return null
     }
 }
